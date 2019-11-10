@@ -1,0 +1,21 @@
+{
+    "name": "netesy/yii2-vtpass",
+    "description": "A plugin to handle working with Vtpass",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension"," vtpass"," vtu"," nigeria"," sales"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Netesy Emmanuel",
+            "email": "netesy1@gmail.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "~2.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "netesy\\vtpass\\": ""
+        }
+    }
+}
