@@ -14,7 +14,7 @@ class ClubKonnect extends \yii\base\Component
     public $url ;
 
 
-    public function _constructor($userid, $apikey, $url){
+    public function _construct($userid, $apikey, $url){
         $this->username = $userid;
         $this->password = $apikey;
         $this->url = $url;
