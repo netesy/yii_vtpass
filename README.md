@@ -29,3 +29,6 @@ Once the extension is installed, simply use it in your code by  :
 
 ```php
 <?= \netesy\vtpass\Vtpass::widget(); ?>```
+
+```php
+<?= \netesy\vtpass\ClubKonnect::getBalance(); ?>```
