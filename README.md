@@ -28,7 +28,7 @@ Usage
 Once the extension is installed, simply use it in your code by  :
 
 ```php
-<?= \netesy\vtpass\Vtpass::widget(); ?>```
+<?= \netesy\vtpass\Vtpass::getBalance(); ?>```
 
 ```php
 <?= \netesy\vtpass\ClubKonnect::getBalance(); ?>```
