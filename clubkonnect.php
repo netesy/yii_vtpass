@@ -14,10 +14,23 @@ class ClubKonnect extends \yii\base\Component
     public $url ;
 
 
-    public function _construct($userid, $apikey, $url){
-        $this->username = $userid;
-        $this->password = $apikey;
-        $this->url = $url;
+ /**
+    *   @var Array 
+    *   sample
+    *   Yii::$app->clubkonnect->setusername('username')
+    *          ->setPassword('password')
+    *          ->setCallback('http://example.com');
+    */
+    public function setUsername($username){
+        $this->username = $username;
+    }
+
+    public function setPassword($password){
+        $this->password = $password;
+    }
+
+    public function setCallback($url){
+        $this->sender = $url;
     }
     /**
     *   @var Array 
