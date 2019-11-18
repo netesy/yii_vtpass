@@ -13,11 +13,30 @@ class Vtpass extends \yii\base\Widget
     public $sender;
     public $url ;
     
+    
+ /**
+    *   @var Array 
+    *   sample
+    *   Yii::$app->vtpass->setusername('username')
+    *          ->setPassword('password')
+    *          ->setCallback('http://example.com');
+    */
+    public function setUsername($username){
+        $this->username = $username;
+    }
+
+    public function setPassword($password){
+        $this->password = $password;
+    }
+
+    public function setCallback($url){
+        $this->sender = $url;
+    }
 
     /**
     * @var Array
     *  sample
-    * Yii::$app->vtapp->getBalance();
+    * Yii::$app->vtpass->getBalance();
     */
     public function getBalance()
     {
@@ -28,7 +47,7 @@ class Vtpass extends \yii\base\Widget
         /**
     * @var Array
     *  sample
-    * Yii::$app->vtapp->getBouquet();
+    * Yii::$app->vtpass->getBouquet();
     */
     public function getBouquet(array $option)
     {
@@ -59,7 +78,7 @@ class Vtpass extends \yii\base\Widget
    /**
     *@var Array
     * sample 
-    * Yii::vtpass->checkTransaction([
+    * Yii::$app->vtpass->checkTransaction([
     *     'request_id' => $request_id, // the transaction reference number
     * ]);
     *
@@ -75,7 +94,7 @@ class Vtpass extends \yii\base\Widget
     /**
     *@var Array
     * sample 
-    * Yii::vtpass->verifyNumber([
+    * Yii::$app->vtpass->verifyNumber([
     *     'billersCode' => $smartcardnumber, // the smartcard number or meter number for sandbox use 1212121212
     *     'serviceID' => $provider, // the service provider e.g dstv, gotv, startimes or jed 
     * ]);
@@ -156,7 +175,7 @@ class Vtpass extends \yii\base\Widget
         $phone =  $option['phone'];
 
 
-        $jsonResponse = $this->curl_call($this->url.'/pay', $option);
+        $jsonResponse = $this->call_api($this->url.'/pay', $option);
         
         unset($option['request_id']);
         unset($option['serviceID']);
@@ -183,7 +202,7 @@ class Vtpass extends \yii\base\Widget
         $amount = $option['amount'];
         $phone =  $option['phone'];
 
-        $jsonResponse = $this->curl_call($this->url.'/pay', $option);
+        $jsonResponse = $this->call_api($this->url.'/pay', $option);
 
         unset($option['request_id']);
         unset($option['serviceID']);
@@ -208,7 +227,7 @@ class Vtpass extends \yii\base\Widget
         $amount = $option['amount'];
         $phone =  $option['phone'];
 
-        $jsonResponse = $this->curl_call($this->url.'/pay', $option);
+        $jsonResponse = $this->call_api($this->url.'/pay', $option);
         unset($option['request_id']);
         unset($option['serviceID']);
         unset($option['amount']);
