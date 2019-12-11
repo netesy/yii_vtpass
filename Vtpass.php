@@ -33,6 +33,16 @@ class Vtpass extends \yii\base\Widget
         $this->sender = $url;
     }
 
+    public function isLive(bool $live){
+        if($live == true){
+            $this->url = "https://vtpass.com/api/";
+        }elseif($live == false){
+            $this->url = "https://sandbox.vtpass.com/api/";
+        }else{
+                $this->url = "https://vtpass.com/api/";
+        }
+    }
+
     /**
     * @var Array
     *  sample
@@ -57,24 +67,6 @@ class Vtpass extends \yii\base\Widget
         return $jsonResponse;
     }
 
-    /**
-    *   @var Array 
-    *   sample
-    *   Yii::$app->vtpass->sendMessage([
-    *       'number' => $number,
-    *       'message' => 'message',
-    *   ]);
-    */
-    public function sendMessage(array $option){
-        $number = $option['number'];
-        $message =  $option['message'];
-        unset($option['number']);
-        unset($option['message']);
-        $jsonResponse = $this->curl_call($this->url.'?username='. $this->username .'&password='. $this->password
-                .'&message='.$message .'&sender='.$this->sender.'&mobiles='.$this->sender, $option);
-        return json_decode($jsonResponse);
-    } 
-
    /**
     *@var Array
     * sample 
@@ -86,7 +78,7 @@ class Vtpass extends \yii\base\Widget
     public function checkTransaction(array $option){
         ///$host = "http://"
         $request_id = $option['request_id'];
-        $jsonResponse = $this->call_api($this->url.'/requery');
+        $jsonResponse = $this->call_api($this->url.'/requery', $option);
         unset($option['request_id']);
         return $jsonResponse;
     }
@@ -101,11 +93,11 @@ class Vtpass extends \yii\base\Widget
     *
     */
     public function verifyNumber(array $option){
-        $billersCode = $option['smartcard'];
-        $serviceID = $option['provider'];
+        $billersCode = $option['billersCode'];
+        $serviceID = $option['serviceID'];
         $jsonResponse = $this->call_api($this->url.'/merchant-verify', $option);
-        unset($option['smartcard']);
-        unset($option['provider']);
+        unset($option['billersCode']);
+        unset($option['serviceID']);
         return $jsonResponse;
     }
 
@@ -146,31 +138,8 @@ class Vtpass extends \yii\base\Widget
     public function buyData(array $option){
         $request_id = $option['request_id'];
         $serviceID =  $option['serviceID'];
-        $amount = $option['amount'];
-        $phone =  $option['phone'];
-
-        $jsonResponse = $this->call_api($this->url.'/pay', $option);
-
-        unset($option['request_id']);
-        unset($option['serviceID']);
-        unset($option['amount']);
-        unset($option['phone']);
-        return json_decode($jsonResponse);
-    } 
-
-    /**
-    *   @var Array 
-    *   sample
-    *   Yii::$app->vtpass->buyPower([
-    *       'request_id' => $request_id, //string ref id
-    *       'serviceID' => 'serviceID', //string e.g mtn
-    *       'amount' => $amount, //int 
-    *       'phone' => 'phone', //int
-    *   ]);
-    */
-    public function buyPower(array $option){
-        $request_id = $option['request_id'];
-        $serviceID =  $option['serviceID'];
+        $billersCode = $option['billersCode'];
+        $variation_code = $option['variation_code'];
         $amount = $option['amount'];
         $phone =  $option['phone'];
 
@@ -179,6 +148,41 @@ class Vtpass extends \yii\base\Widget
         
         unset($option['request_id']);
         unset($option['serviceID']);
+        unset($option['billersCode']);
+        unset( $option['variation_code']);
+        unset($option['amount']);
+        unset($option['phone']);
+        return json_decode($jsonResponse);
+    } 
+    } 
+
+    /**
+    *   @var Array 
+    *   sample
+    *   Yii::$app->vtpass->buyPower([
+    *       'request_id' => $request_id, //string ref id
+    *       'serviceID' => 'serviceID', //string e.g ikeja electric
+    *       'billersCode' => '', //meter number
+    *       'variation_code' => '',//metrer typev e.g prepaid
+    *       'amount' => $amount, //int 
+    *       'phone' => 'phone', //int
+    *   ]);
+    */
+    public function buyPower(array $option){
+        $request_id = $option['request_id'];
+        $serviceID =  $option['serviceID'];
+        $billersCode = $option['billersCode'];
+        $variation_code = $option['variation_code'];
+        $amount = $option['amount'];
+        $phone =  $option['phone'];
+
+
+        $jsonResponse = $this->call_api($this->url.'/pay', $option);
+        
+        unset($option['request_id']);
+        unset($option['serviceID']);
+        unset($option['billersCode']);
+        unset( $option['variation_code']);
         unset($option['amount']);
         unset($option['phone']);
         return json_decode($jsonResponse);
@@ -190,7 +194,7 @@ class Vtpass extends \yii\base\Widget
     *   Yii::$app->vtpass->buyTv([
     *       'request_id' => $request_id, //string ref id
     *       'serviceID' => '$serviceID', //string e.g startimes,gotv or dstv
-    *       'billersCode'  => '$billersCode', //string
+    *       'billersCode'  => '$billersCode', //string e.g decoder number
     *       'variation_code' => '$variation_code', //string the bouquet code
     *       'amount' => $amount, //int 
     *       'phone' => 'phone', //int
@@ -199,50 +203,31 @@ class Vtpass extends \yii\base\Widget
     public function buyTv(array $option){
         $request_id = $option['request_id'];
         $serviceID =  $option['serviceID'];
+        $billersCode = $option['billersCode'];
+        $variation_code = $option['variation_code'];
         $amount = $option['amount'];
         $phone =  $option['phone'];
 
-        $jsonResponse = $this->call_api($this->url.'/pay', $option);
-
-        unset($option['request_id']);
-        unset($option['serviceID']);
-        unset($option['amount']);
-        unset($option['phone']); 
-        return json_decode($jsonResponse);
-    }  
-
-        /**
-    *   @var Array 
-    *   sample
-    *   Yii::$app->vtpass->buyCard([
-    *       'request_id' => $request_id, //string ref id
-    *       'serviceID' => 'serviceID', //string e.g mtn
-    *       'amount' => $amount, //int 
-    *       'phone' => 'phone', //int
-    *   ]);
-    */
-    public function buyCard(array $option){
-        $request_id = $option['request_id'];
-        $serviceID =  $option['serviceID'];
-        $amount = $option['amount'];
-        $phone =  $option['phone'];
 
         $jsonResponse = $this->call_api($this->url.'/pay', $option);
+        
         unset($option['request_id']);
         unset($option['serviceID']);
+        unset($option['billersCode']);
+        unset( $option['variation_code']);
         unset($option['amount']);
         unset($option['phone']);
         return json_decode($jsonResponse);
     } 
-
+    
     private function call_api($url, $option=array(),$header=array()){
     $curl  = curl_init();
     curl_setopt_array($curl, array(
-    CURLOPT_URL => $host,
+    CURLOPT_URL => $url,
 	CURLOPT_RETURNTRANSFER => true,
 	CURLOPT_ENCODING => "",
     CURLOPT_MAXREDIRS => 10, 
-	CURLOPT_USERPWD => $username.":" .$password,
+	CURLOPT_USERPWD => $this->username.":" .$this->password,
 	CURLOPT_TIMEOUT => 30,
     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
     CURLOPT_USERAGENT, "VTPASSAPI 1.0",
