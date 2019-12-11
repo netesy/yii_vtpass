@@ -1,6 +1,6 @@
 <?php
 
-namespace netesy\vtu\clubkonnect;
+namespace netesy\vtpass;
 
 /**
  * @author Netesy Emmanuel <netesy1@gmail.com>
@@ -11,7 +11,7 @@ class ClubKonnect extends \yii\base\Component
     public $username;
     public $password;
     public $sender;
-    public $url ;
+    public $url;
 
 
  /**
@@ -32,6 +32,17 @@ class ClubKonnect extends \yii\base\Component
     public function setCallback($url){
         $this->sender = $url;
     }
+
+    public function isLive(bool $live){
+            //! set the details for clubkonnect 
+        if($live == true){
+            $this->url = "https://www.nellobytesystems.com";
+        }elseif($live == false){
+            $this->url = "https://www.nellobytesystems.com";
+        }else{
+                $this->url = "https://www.nellobytesystems.com";
+        }
+    }
     /**
     *   @var Array 
     *   sample
@@ -40,7 +51,7 @@ class ClubKonnect extends \yii\base\Component
     *       'APIKey' => 'the api key',
     *   ]);
     */
-    public function getBalance(array $option)
+    public function getBalance()
     {
         $jsonResponse = $this->curl_call($this->url.'/APIWalletBalanceV1.asp?UserID='. $this->username .'&APIKey='. $this->password);
         return $jsonResponse;
